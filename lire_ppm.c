@@ -17,7 +17,6 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 	char premiere[MAX_CHAINE], a[MAX_CHAINE], p[3];
 	int b=0, c=0, d=0;
 	FILE *flot_entree;
-	struct RGB v;
 	
 	flot_entree = fopen(nom_fichier, "r");
 	
@@ -68,12 +67,11 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 			}
 			for (int i=0; i<b; i++){
 				for (int j=0; j<c; j++){
-					fscanf(flot_entree, "%d %d %d", &v.valeurR, &v.valeurG, &v.valeurB);
+					fscanf(flot_entree, "%d %d %d", &matrice[i][j].valeurR, &matrice[i][j].valeurG, &matrice[i][j].valeurB);
 				}	
 			}
 	
 	}
-	printf("%d %d %d", v.valeurR, v.valeurG, v.valeurB);
     return OK;
 }
 

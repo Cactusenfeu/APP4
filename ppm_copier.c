@@ -75,47 +75,32 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 }
 
 
+int ppm_copier(struct RGB matrice1[MAX_HAUTEUR][MAX_LARGEUR], int lignes1, 
+				int colonnes1, struct RGB matrice2[MAX_HAUTEUR]
+				[MAX_LARGEUR], int *p_lignes2, int *p_colonnes2){
 
-int ppm_ecrire(char nom_fichier[], struct RGB 
-			matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, 
-			int maxval, struct MetaData metadonnees){
-	
-	FILE *flot_ecrire;
-	
-	flot_ecrire = fopen(nom_fichier, "w");
-	
-	if(flot_ecrire == NULL){
-		printf("Erreur d’ouverture de fichier.\n");
+	if (lignes1 > MAX_HAUTEUR || colonnes1 > MAX_LARGEUR){
+		return -2;
 	}
 	
-	else{
-		
-		//fprintf(flot_ecrire, "#%s\n", metadonnes.auteur);		
-		
-		fprintf(flot_ecrire, "P3\n");
-		
-		fprintf(flot_ecrire, "%d %d \n%d\n", lignes, colonnes, maxval);
-		
-		for (int i=0; i<lignes; i++){
-			for (int j=0; j<colonnes; j++){
-				fprintf(flot_ecrire, "%d ", matrice[i][j].valeurR);
-				fprintf(flot_ecrire, "%d ", matrice[i][j].valeurG);
-				fprintf(flot_ecrire, "%d ", matrice[i][j].valeurB);
-			}
-			fprintf(flot_ecrire, "\n");
+	*p_lignes2 = lignes1;
+	*p_colonnes2 = colonnes1;
+	
+	for (int i=0; i<lignes1; i++){
+		for (int j=0; j<colonnes1; j++){
+			matrice2[i][j].valeurR = matrice1[i][j]. valeurR;
+			matrice2[i][j].valeurG = matrice1[i][j]. valeurG;
+			matrice2[i][j].valeurB = matrice1[i][j]. valeurB;
 		}
-		
 	}
-	
-    return OK;
+			
+	return 0;
 }
-
-
-
 
 int main()
 {
-    int lignes1=256, colonnes1=192;
+    int lignes1, colonnes1;
+    int lignes2, colonnes2;
     int maxval;
     struct MetaData metadonnees;
     int retour;
@@ -124,13 +109,14 @@ int main()
 
 	retour = ppm_lire("Sherbrooke_Frontenac_nuit.ppm", imageRGB1, 
                       &lignes1, &colonnes1, 
-                      &maxval, &metadonnees);                
-    
-	retour = ppm_ecrire("test.ppm", imageRGB1, lignes1, colonnes1, 
-						maxval, metadonnees);
-	
+                      &maxval, &metadonnees);
+                      
+    retour = ppm_copier(imageRGB1, lignes1, colonnes1, imageRGB2, &lignes2, &colonnes2);
+					
     printf("-> Fin!\n");
 
     return 0;
 }
+
+
 
