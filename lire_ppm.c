@@ -15,7 +15,7 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 				struct MetaData *p_metadonnees)
 {
 	char premiere[MAX_CHAINE], a[MAX_CHAINE], p[3];
-	int b=0, c=0, d=0;
+	int b=0, c=0, d=0, pv=0, position=0;
 	FILE *flot_entree;
 	
 	flot_entree = fopen(nom_fichier, "r");
@@ -32,13 +32,29 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 			
 			for (int i=0; i<MAX_CHAINE; i++){
 				fscanf(flot_entree, "%c", &a[i]);
-				if (a[i] != '\n'){
-					printf("%c", a[i]);
+				if (a[i] != ';' && a[i] != '\n'){
+					if (pv == 0){
+						p_metadonnees->auteur[i]= a[i];
+					}
+					if (pv == 1){
+						p_metadonnees->dateCreation[i-position-1]= a[i];
+					}
+					if (pv == 2){
+						p_metadonnees->lieuCreation[i-position-1] = a[i];
+					}
+					if (pv>2){
+						return -1;
+					}
 				}
-				else{
+				if (a[i] == ';'){
+					pv++;
+					position = i;
+				}				
+				if (a[i] == '\n'){
 					i = MAX_CHAINE;
 				}
 			}
+			
 			fscanf(flot_entree, "%[^\n]", p);
 			printf("\n%s\n", p);
 			if (p[1] != '3'){
