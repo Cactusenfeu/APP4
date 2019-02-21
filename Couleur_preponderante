@@ -30,6 +30,9 @@ occurence[valeur_prep]=0;
 			}
 		}
 	}
+	if (occurence[valeur]!=occurence[valeur_prep]){
+		return ERREUR;
+	}
 	return valeur_prep;
 }
 	
