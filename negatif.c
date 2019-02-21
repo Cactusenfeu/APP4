@@ -14,7 +14,7 @@ int lignes, int colonnes, int maxval){
 				for (int c=0;c<colonnes;c++){
 					matrice[l][c]=maxval-matrice[l][c];
 					if(matrice[l][c]>maxval){
-						return ERREUR;
+						return maxval;
 					}
 					printf( "%d\t", matrice[l][c]);
 				}
