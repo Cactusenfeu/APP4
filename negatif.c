@@ -1,39 +1,32 @@
 #include <stdio.h>
 #include <string.h>
+#include "bibliotheque_images.h"
 
-#define MAX_HAUTEUR 3
-#define MAX_LARGEUR 3
+#define LM 3
+#define CM 3
+
+int mr[MAX_HAUTEUR][MAX_LARGEUR]={{1,2,3},{4,5,6},{7,8,9}};
+
+int pgm_negatif(int matrice[MAX_HAUTEUR][MAX_LARGEUR],
+int lignes, int colonnes, int maxval){
+	
+			for (int l=0;l<lignes;l++){
+				for (int c=0;c<colonnes;c++){
+					matrice[l][c]=maxval-matrice[l][c];
+					if(matrice[l][c]>maxval){
+						return ERREUR;
+					}
+					printf( "%d\t", matrice[l][c]);
+				}
+			printf("\n");	
+			}
+			return OK;
+}
+	
 
 int main(){
-	int maxval=255;
-	int matrice[MAX_HAUTEUR][MAX_LARGEUR];
-	char matrice_donnee[128], matrice_copiee[128];
-	FILE *flot_entree, *flot_sortie;
-	
-	strcpy(matrice_donnee, "matrice.txt");
-	strcpy(matrice_copiee, "matriceC.txt");
-	
-	flot_entree = fopen(matrice_donnee, "r");
-	flot_sortie = fopen(matrice_copiee, "w");
-	
-	if (flot_entree==NULL || flot_sortie==NULL){
-		printf("Erreur d'ouverture de fichier.\n");
-	}
-	else{
-		while (!feof(flot_entree)){
-			for (int l=0;l<MAX_HAUTEUR;l++){
-				for (int c=0;c<MAX_LARGEUR;c++){
-					fscanf(flot_entree, "%d", &matrice[l][c]);
-					matrice[l][c]=maxval-matrice[l][c];
-					fprintf(flot_sortie, "%d\t", matrice[l][c]);
-				}
-			fprintf(flot_sortie, "\n");	
-			}
-		}
-	}
-	return (0);
-	fclose(flot_entree);
-	fclose(flot_sortie);
+	int retour=pgm_negatif(mr,3, 3, 255);
+	printf("%d", retour);
 	return 0;
 }
 
