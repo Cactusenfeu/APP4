@@ -9,7 +9,6 @@ int image2[MAX_HAUTEUR][MAX_LARGEUR];
 struct RGB imageRGB1[MAX_HAUTEUR][MAX_LARGEUR];
 struct RGB imageRGB2[MAX_HAUTEUR][MAX_LARGEUR];
 
-
 int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], 
 				int *p_lignes, int *p_colonnes, int *p_maxval, 
 				struct MetaData *p_metadonnees)
@@ -17,7 +16,6 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 	char premiere[MAX_CHAINE], a[MAX_CHAINE], p[3];
 	int b=0, c=0, d=0;
 	FILE *flot_entree;
-	struct RGB v;
 	
 	flot_entree = fopen(nom_fichier, "r");
 	
@@ -68,12 +66,48 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 			}
 			for (int i=0; i<b; i++){
 				for (int j=0; j<c; j++){
-					fscanf(flot_entree, "%d %d %d", &v.valeurR, &v.valeurG, &v.valeurB);
+					fscanf(flot_entree, "%d %d %d", &matrice[i][j].valeurR, &matrice[i][j].valeurG, &matrice[i][j].valeurB);
+					//printf("%d %d %d ", v[i][j].valeurR, v[i][j].valeurG, v[i][j].valeurB);
 				}	
 			}
 	
 	}
-	printf("%d %d %d", v.valeurR, v.valeurG, v.valeurB);
+    return OK;
+}
+
+
+int ppm_ecrire(char nom_fichier[], struct RGB 
+			matrice[MAX_HAUTEUR][MAX_LARGEUR], int lignes, int colonnes, 
+			int maxval, struct MetaData metadonnees){
+	
+	//struct MetaData meta;
+	FILE *flot_ecrire;
+	
+	flot_ecrire = fopen(nom_fichier, "w");
+	
+	if(flot_ecrire == NULL){
+		printf("Erreur d’ouverture de fichier.\n");
+	}
+	
+	else{
+		
+		//fprintf(flot_ecrire, "#%s\n", meta.auteur);		
+		
+		fprintf(flot_ecrire, "P3\n");
+		
+		fprintf(flot_ecrire, "%d %d \n%d\n", lignes, colonnes, maxval);
+		
+		for (int i=0; i<lignes; i++){
+			for (int j=0; j<colonnes; j++){
+				fprintf(flot_ecrire, "%d ", matrice[i][j].valeurR);
+				fprintf(flot_ecrire, "%d ", matrice[i][j].valeurG);
+				fprintf(flot_ecrire, "%d ", matrice[i][j].valeurB);
+			}
+			fprintf(flot_ecrire, "\n");
+		}
+		
+	}
+	
     return OK;
 }
 
@@ -82,10 +116,9 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR],
 
 int main()
 {
-    int lignes1, colonnes1;
+    int lignes1=256, colonnes1=192;
     int maxval;
     struct MetaData metadonnees;
-    
     int retour;
 
     printf("-> Debut!\n");
@@ -93,6 +126,15 @@ int main()
 	retour = ppm_lire("Sherbrooke_Frontenac_nuit.ppm", imageRGB1, 
                       &lignes1, &colonnes1, 
                       &maxval, &metadonnees);
+     for (int i=0; i<lignes1; i++){
+				for (int j=0; j<colonnes1; j++){
+					//fscanf(flot_entree, "%d %d %d", &v[i][j].valeurR, &v[i][j].valeurG, &v[i][j].valeurB);
+					printf("%d %d %d ", imageRGB1[i][j].valeurR, imageRGB1[i][j].valeurG, imageRGB1[i][j].valeurB);
+				}	
+			}                 
+    
+	retour = ppm_ecrire("ecrire.txt", imageRGB1, lignes1, colonnes1, 
+						maxval, metadonnees);
 	
     printf("-> Fin!\n");
 

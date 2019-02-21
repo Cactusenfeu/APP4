@@ -60,9 +60,9 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR],
 		
 			fscanf(flot_entree, "%d %d %d", &b, &c, &d);
 			printf("%d %d\n%d\n", b, c, d);
-			p_lignes = &b;
-			p_colonnes = &c;
-			p_maxval = &d;
+			*p_lignes = b;
+			*p_colonnes = c;
+			*p_maxval = d;
 			if (b>256 || c>256){
 				printf("ERREUR2");
 				return -2;
