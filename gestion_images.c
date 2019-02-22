@@ -18,34 +18,23 @@ struct RGB imageRGB2[MAX_HAUTEUR][MAX_LARGEUR];
 
 int main()
 {
-	void AutoValidation();
-    int lignes1, colonnes1;
-    //int lignes2, colonnes2;
-    int maxval;
-    //int histogramme[MAX_VALEUR+1];
-    char nom[MAX_CHAINE];
-    struct MetaData metadonnees;
+	 //AutoValidation();
+     test_pgm_lire();
+	 //test_pgm_ecrire();
+	 //***test_pgm_copier();
+	 //***test_pgm_couleur_preponderante();
+	 //***test_pgm_creer_histogramme();
+	 //***test_pgm_eclaircir_noircir();
+	 //***test_pgm_creer_negatif();
+	 //***test_pgm_extraire();
+	 //***test_pgm_sont_identiques();
+	 //***test_pgm_pivoter90();
 
-	int retour;
-
-    printf("-> Debut!\n");
-
-    retour = pgm_lire(nom, image1, 
-                      &lignes1, &colonnes1, 
-                      &maxval, &metadonnees);
-
-	printf("-> Retour: ");
-	if (retour == OK)
-		printf("-> OK");
-	else
-		printf("-> ERREUR");
-	printf("\n");
-
-    pgm_ecrire(nom, image1, 
-               lignes1, colonnes1, 
-               maxval, metadonnees);
-
-    printf("-> Fin!\n");
+	 //test_ppm_lire();
+	 // test_ppm_ecrire();
+	 //***test_ppm_copier();
+	 //***test_ppm_sont_identiques();
+	 //***test_ppm_pivoter90();
 
     return 0;
 }
