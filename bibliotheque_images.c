@@ -24,6 +24,10 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_l
 	 
 	else{		
 		fscanf(flot_entree, "%c", premiere);
+		
+		if (premiere[0] != 'P' && premiere[0] != '#'){
+			return -3;
+		}
 		if (premiere[0] == '#'){
 			//printf("%s", premiere);
 			
@@ -47,7 +51,7 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_l
 					pv++;
 					position = i;
 				}
-				if (a[i] == '\n'){
+				if (a[i] == '\n' && pv != 2){
 					return -1;
 				}				
 				if (a[i] == '\n' && pv == 2){
@@ -73,9 +77,6 @@ int pgm_lire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR], int *p_l
 				//printf("ERREUR3");
 				return -3;
 			}
-		if (premiere[0] != 'P' && premiere[0] != '#'){
-			return -3;
-		}
 		}
 			fscanf(flot_entree, "%d", &b);
 			fscanf(flot_entree, "%d", &c);
@@ -121,10 +122,11 @@ int pgm_ecrire(char nom_fichier[], int matrice[MAX_HAUTEUR][MAX_LARGEUR], int li
 		fprintf(flot_ecrire, "P2\n");
 		
 		fprintf(flot_ecrire, "%d %d \n%d\n", lignes, colonnes, maxval);
+		printf("%d %d \n%d\n", lignes, colonnes, maxval);
 		
 		for (int i=0; i<lignes; i++){
 			for (int j=0; j<colonnes; j++){
-				fprintf(flot_ecrire, "%d", matrice[i][j]);
+				fprintf(flot_ecrire, "%d " ,matrice[i][j]);
 			}
 			//fprintf(flot_ecrire, "\n");
 		}	
@@ -344,38 +346,41 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], i
 	 
 	else{		
 		fscanf(flot_entree, "%c", premiere);
+		if (premiere[0] != 'P' && premiere[0] != '#'){
+			return -3;
+		}
 		if (premiere[0] == '#'){
 			//printf("%s", premiere);
 			
 			for (int i=0; i<MAX_CHAINE; i++){
 				fscanf(flot_entree, "%c", &a[i]);
+				if (a[i] == ';'){
+					pv++;
+					position = i+1;
+				}				
+				if (a[i] == '\n'){
+					i = MAX_CHAINE;
+				}
 				if (a[i] != ';' && a[i] != '\n'){
 					if (pv == 0){
 						p_metadonnees->auteur[i]= a[i];
 					}
 					if (pv == 1){
-						p_metadonnees->dateCreation[i-position-1]= a[i];
+						p_metadonnees->dateCreation[i-position]= a[i];
 					}
 					if (pv == 2){
-						p_metadonnees->lieuCreation[i-position-1] = a[i];
+						p_metadonnees->lieuCreation[i-position] = a[i];
 					}
 					if (pv>2){
 						return -1;
 					}
-				}
-				if (a[i] == ';'){
-					pv++;
-					position = i;
-				}				
-				if (a[i] == '\n'){
-					i = MAX_CHAINE;
 				}
 			}
 			
 			fscanf(flot_entree, "%[^\n]", p);
 			//printf("\n%s\n", p);
 			if (p[1] != '3'){
-				printf("ERREUR3");
+				//printf("ERREUR3");
 				return -3;
 			}
 		}
@@ -390,17 +395,22 @@ int ppm_lire(char nom_fichier[], struct RGB matrice[MAX_HAUTEUR][MAX_LARGEUR], i
 		}
 		
 			fscanf(flot_entree, "%d %d %d", &b, &c, &d);
-			//printf("%d %d\n%d\n", b, c, d);
+			printf("%d %d\n%d\n", b, c, d);
 			*p_lignes = b;
 			*p_colonnes = c;
 			*p_maxval = d;
-			if (b>256 || c>256){
+			if (b>MAX_HAUTEUR || c>MAX_LARGEUR){
 				//printf("ERREUR2");
 				return -2;
+			}
+			if (d>255){
+				//printf("ERREUR3");
+				return -3;
 			}
 			for (int i=0; i<b; i++){
 				for (int j=0; j<c; j++){
 					fscanf(flot_entree, "%d %d %d", &matrice[i][j].valeurR, &matrice[i][j].valeurG, &matrice[i][j].valeurB);
+					//printf("%d %d %d", matrice[i][j].valeurR, matrice[i][j].valeurG, matrice[i][j].valeurB);
 				}	
 			}
 	
